@@ -67,15 +67,13 @@ namespace RingPipeLine
                 string s;
                 int N = Nodes.Length;
 
-                #region /Line
                 for (int i = 0; i < N; i++)
                 {
                     if (Nodes[i].Edge != null)
                     {
                         int L = Nodes[i].Edge.Length;
                         MyBrush.Color = Color.White;
-                        //Pen MyPen = Pens.Black;
-
+                        
                         for (int j = 0; j < L; j++)
                         {
                             switch (typ_graph)
@@ -85,6 +83,7 @@ namespace RingPipeLine
                                         MyPen = Pens.Red;
                                     else
                                         MyPen = new Pen(Nodes[i].Edge[j].color); // Pens.Black;
+
                                     int a1 = Nodes[i].x;
                                     int b1 = Nodes[i].y;
                                     int a2 = Nodes[Nodes[i].Edge[j].numNode].x;
@@ -93,15 +92,17 @@ namespace RingPipeLine
 
                                     s = Convert.ToString(Nodes[i].Edge[j].A);
                                     SizeF size = g.MeasureString(s, MyFont);
-                                    //g.DrawRectangle(MyPen, (a1 + a2) / 2 - size.Width / 2, (b1 + b2) / 2 - size.Height / 2, size.Width, size.Height);
+                                    
                                     if (visibleA)
                                     {
                                         g.FillRectangle(Brushes.White, (a1 + a2) / 2 - size.Width / 2, (b1 + b2) / 2 - size.Height / 2, size.Width, size.Height);
+
                                         g.DrawString(s, MyFont, Brushes.Black,
                                             (a1 + a2) / 2 - size.Width / 2,
                                             (b1 + b2) / 2 - size.Height / 2);
                                     }
                                     break;
+
                                 case 1:
                                     a1 = Nodes[i].x + Nodes[i].Edge[j].x1c;
                                     b1 = Nodes[i].y;
@@ -120,24 +121,25 @@ namespace RingPipeLine
                                     s = Convert.ToString(Nodes[i].Edge[j].A);
                                     size = g.MeasureString(s, MyFont);
 
-                                    //g.DrawRectangle(MyPen, (a1 + a2) / 2 - size.Width / 2, (b1 + b2) / 2 - size.Height / 2, size.Width, size.Height);
                                     if (visibleA)
                                     {
                                         g.FillRectangle(Brushes.White, (a1 + a2) / 2 - size.Width / 2, (b1 + b2) / 2 - size.Height / 2, size.Width, size.Height);
+
                                         g.DrawString(s, MyFont, Brushes.Black,
                                             (a1 + a2) / 2 - size.Width / 2,
                                             (b1 + b2) / 2 - size.Height / 2);
                                     }
+
                                     if (b1 < b2)
                                         g.FillEllipse(Brushes.Black, a2 - 3, b2 - hy - 3 - 3, 6, 6);
                                     else
                                         g.FillEllipse(Brushes.Black, a2 - 3, b2 + hy - 3 + 3, 6, 6);
+
                                     break;
                             }
                         }
                     }
                 }
-                #endregion
 
                 for (int i = 0; i < N; i++)
                 {
@@ -145,22 +147,31 @@ namespace RingPipeLine
                         MyPen = Pens.Red;
                     else
                         MyPen = Pens.Silver;
+
                     if (Nodes[i].visit)
+                    {
                         MyBrush.Color = Color.Silver;
+                    }
                     else
+                    {
                         if (Nodes[i] == SelectNode)
                             MyBrush.Color = Color.Yellow;
                         else
                             MyBrush.Color = Color.LightYellow;
+                    }
+
                     switch (typ_graph)
                     {
                         case 0:
                             MyBrush.Color = Nodes[i].color;
                             g.FillEllipse(MyBrush, Nodes[i].x - hy, Nodes[i].y - hy, 2 * hy, 2 * hy);
-                            //MyPen.Color = Color.Black;
-                            g.DrawEllipse(Pens.Black /*MyPen*/, Nodes[i].x - hy, Nodes[i].y - hy, 2 * hy, 2 * hy);
+                            
+                            g.DrawEllipse(Pens.Black, Nodes[i].x - hy, Nodes[i].y - hy, 2 * hy, 2 * hy);
+
                             s = Convert.ToString(i);
+
                             SizeF size = g.MeasureString(s, MyFont);
+
                             g.DrawString(s, MyFont, Brushes.Black,
                                 Nodes[i].x - size.Width / 2,
                                 Nodes[i].y - size.Height / 2);
@@ -189,18 +200,24 @@ namespace RingPipeLine
         protected string DataInStr()
         {
             byte[] byByte;
-            int L = DataInInt(); //BitConverter.ToInt32(byData, ofs); ofs += 4;
+
+            int L = DataInInt(); 
+
             byByte = new byte[4 * L];
 
             for (int j = 0; j <= 4 * L - 1; j++)
                 byByte[j] = byData[j + ofs];
+
             char[] charData = new char[L];
+
             Decoder d = Encoding.UTF32.GetDecoder();
+
             d.GetChars(byByte, 0, byByte.Length, charData, 0);
 
             string s = "";
             for (int j = 0; j < charData.Length; j++)
                 s += charData[j];
+
             ofs += 4 * L;
 
             return s;
@@ -210,45 +227,69 @@ namespace RingPipeLine
         {
             byte[] byByte;
             byByte = BitConverter.GetBytes(k);
-            byByte.CopyTo(byData, ofs); ofs += 4;
+            byByte.CopyTo(byData, ofs); 
+            ofs += 4;
         }
 
         protected void StrInData(string s)
         {
             byte[] byByte;
-            int L = s.Length; IntInData(L);
+            int L = s.Length; 
+
+            IntInData(L);
+
             char[] charData = s.ToCharArray();
+
             byByte = new byte[4 * charData.Length];
+
             Encoder e = Encoding.UTF32.GetEncoder();
+
             e.GetBytes(charData, 0, charData.Length, byByte, 0, true);
-            byByte.CopyTo(byData, ofs); ofs += 4 * L;
+
+            byByte.CopyTo(byData, ofs); 
+            ofs += 4 * L;
         }
 
-        protected int LengthFile()  // вычислить размер файла
+        /// <summary>
+        /// вычислить размер файла
+        /// </summary>
+        /// <returns></returns>
+        protected int LengthFile()  
         {
             int n = 4;
             int L1 = Nodes.Length;
+
             for (int i = 0; i <= L1 - 1; i++)
             {
                 n += 16 + 4 * Nodes[i].name.Length;
+
                 int L2 = 0;
+
                 if (Nodes[i].Edge != null)
                     L2 = Nodes[i].Edge.Length;
+
                 n += L2 * 20;
             }
+
             return n;
         }
 
+        /// <summary>
+        /// Прочитать файл
+        /// </summary>
         public void Read()
         {
             ofs = 0;
             FileStream aFile = new FileStream(FileName, FileMode.Open);
             int N = (int)aFile.Length;
             byData = new byte[N];
+
             aFile.Read(byData, 0, N);
 
             int L1 = DataInInt();
+
             Nodes = new TNode[L1];
+
             for (int i = 0; i <= L1 - 1; i++)
             {
                 Nodes[i] = new TNode();
@@ -258,7 +299,9 @@ namespace RingPipeLine
 
                 int L2 = DataInInt();
                 Nodes[i].Edge = new TEdge[L2];
+
                 if (L2 != 0)
+                {
                     for (int j = 0; j <= L2 - 1; j++)
                     {
                         Nodes[i].Edge[j].A = DataInInt();
@@ -268,6 +311,7 @@ namespace RingPipeLine
                         Nodes[i].Edge[j].numNode = DataInInt();
                         Nodes[i].Edge[j].color = Color.Silver;
                     }
+                }
             }
 
             aFile.Close();
@@ -307,38 +351,60 @@ namespace RingPipeLine
             aFile.Close();
         }
 
-        public TNode FindNode(int x, int y) // найти узел
+        /// <summary>
+        /// найти узел
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns>Узел либо Null</returns>
+        public TNode FindNode(int x, int y) 
         {
             int N = Nodes.Length;
             int i = -1;
             bool Ok = false;
+
             while ((i < N - 1) && !Ok)
             {
                 i++;
                 Ok = (Nodes[i].x - hx <= x) && (x <= Nodes[i].x + hx) &&
                      (Nodes[i].y - hy <= y) && (y <= Nodes[i].y + hy);
             }
-            if (Ok) return Nodes[i]; else return null;
+
+            if (Ok) 
+                return Nodes[i]; 
+            else 
+                return null;
         }
 
+        /// <summary>
+        /// Удалить ребро
+        /// </summary>
         public void DeSelectEdge()
         {
             int N = Nodes.Length;
+
             for (int i = 0; i < N; i++)
             {
                 if (Nodes[i].Edge != null)
                 {
                     int L = Nodes[i].Edge.Length;
+
                     for (int j = 0; j < L; j++)
                         Nodes[i].Edge[j].select = false;
                 }
             }
         }
 
-        public void AddNode(int x, int y) // добавить узел 
+        /// <summary>
+        /// // добавить узел 
+        /// </summary>
+        /// <param name="x">X</param>
+        /// <param name="y">Y</param>
+        public void AddNode(int x, int y) 
         {
             int N = Nodes.Length;
             Array.Resize<TNode>(ref Nodes, ++N);
+
             Nodes[N - 1] = new TNode();
             Nodes[N - 1].name = "Node " + Convert.ToString(N - 1);
             Nodes[N - 1].x = x;
@@ -346,16 +412,22 @@ namespace RingPipeLine
             Nodes[N - 1].color = Color.White;
         }
 
-        public void AddEdge()  // добавить ребро
+        /// <summary>
+        /// добавить ребро
+        /// </summary>
+        public void AddEdge()
         {
-            int n = -1; bool ok = false;
+            int n = -1; 
+            bool ok = false;
             int Ln = Nodes.Length;
+
             while ((n < Ln - 1) && !ok)
                 ok = Nodes[++n] == SelectNode;
 
             int L = 0;
             if (SelectNodeBeg.Edge != null)
                 L = SelectNodeBeg.Edge.Length;
+
             Array.Resize<TEdge>(ref SelectNodeBeg.Edge, ++L);
             SelectNodeBeg.Edge[L - 1].numNode = n;
             SelectNodeBeg.Edge[L - 1].A = 0;
@@ -365,7 +437,11 @@ namespace RingPipeLine
             SelectNodeBeg.Edge[L - 1].color = Color.Silver;
         }
 
-        int DistLine(int u, int v, int x1, int y1, int x2, int y2)  // расстояние до линии
+        /// <summary>
+        /// расстояние до линии
+        /// </summary>
+        /// <returns></returns>
+        public int DistLine(int u, int v, int x1, int y1, int x2, int y2)  
         {
 
             int A = y2 - y1;
@@ -377,11 +453,20 @@ namespace RingPipeLine
             else
                 return 0;
         }
-
-        public int FindLine(int x, int y, out int NumLine)  // найти ребро
+        /// <summary>
+        ///  найти ребро
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="NumLine"></param>
+        /// <returns></returns>
+        public int FindLine(int x, int y, out int NumLine)  
         {
             int L = Nodes.Length;
-            bool ok = false; int i = -1; NumLine = -1; int j = -1;
+            bool ok = false; 
+            int i = -1; 
+            NumLine = -1; 
+            int j = -1;
             while ((i < L - 1) && !ok)
             {
                 i++;
@@ -414,11 +499,20 @@ namespace RingPipeLine
                 return -1;
         }
 
-        public void DelEdge(int NumNode, int NumEdge)  // удалить ребро
+        /// <summary>
+        /// удалить ребро
+        /// </summary>
+        /// <param name="NumNode"></param>
+        /// <param name="NumEdge"></param>
+        public void DelEdge(int NumNode, int NumEdge)  
         {
             int L = Nodes[NumNode].Edge.Length;
+
             for (int i = NumEdge; i < L - 2; i++)
+            {
                 Nodes[NumNode].Edge[i] = Nodes[NumNode].Edge[i + 1];
+            }
+
             Array.Resize<TEdge>(ref Nodes[NumNode].Edge, L - 1);
         }
 
@@ -453,11 +547,13 @@ namespace RingPipeLine
         }
 
 
+        /// <summary>
+        /// Записать в файл
+        /// </summary>
         public void Write()
         {
             FileStream aFile = new FileStream(FileName, FileMode.Create);
             BinaryWriter f = new BinaryWriter(aFile, Encoding.UTF7);
-
             int L1 = Nodes.Length;
             f.Write(L1);
             for (int i = 0; i < L1; i++)

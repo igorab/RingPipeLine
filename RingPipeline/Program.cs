@@ -11,28 +11,23 @@ namespace RingPipeLine
     
     class SQLiteConnection
     {
-        public string connectionString = "Data Source=hello.db";
+        public string connectionString = "Data Source=Hydro.db";
         public string connectionStringExt = "Data Source=usersdata3.db;Cache=Shared;Mode=ReadOnly;";
 
         public bool CreateConnection()
         {
             //SQLiteConnection
-
             //SQLitePCL
 
             using (var connection = new SqliteConnection(connectionString))
             {
-                
-
                 connection.Open();
                 return true;
             }
 
             return false;
         }
-
     }
-    
     
     static class Program
     {
