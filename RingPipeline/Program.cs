@@ -40,7 +40,7 @@ namespace RingPipeLine
         [STAThread]
         static void Main()
         {
-            bool con = new SQLiteConnection().CreateConnection();
+            //bool con = new SQLiteConnection().CreateConnection();
 
 
             Application.EnableVisualStyles();
