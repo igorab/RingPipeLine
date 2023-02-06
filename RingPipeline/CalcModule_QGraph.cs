@@ -90,8 +90,32 @@ namespace RingPipeLine
 
         }
 
+        /// <summary>
+        /// Incremental Connected Components
+        /// </summary>
+        /// <typeparam name="TVertex"></typeparam>
+        public void IncrementalConnectedComponents<TVertex>()
+        {
+            var g = new AdjacencyGraph<int, SEdge<int>>();
+
+            int[] vert = new int[] { 0, 1, 2, 3 };
+            g.AddVertexRange(vert );
+
+            /*
+            var components = AlgorithmExtensions.IncrementalConnectedComponents(g);
+
+            var current = components();
+            Assert.AreEqual(4, current.Key);
+
+            g.AddEdge(new SEdge<int>(0, 1));
+            current = components(); // query algorithm again
+            Assert.AreEqual(3, current.Key);
+            */
+
+        }
+
         //Dijkstra extension methods
-        public void AlgorithmExtensions<TVertex, TEdge>() where TEdge : QuickGraph.IEdge<TVertex>
+        public void AlgorithmExt<TVertex, TEdge>() where TEdge : QuickGraph.IEdge<TVertex>
         {
             /*
             IVertexAndEdgeListGraph<TVertex, TEdge> graph;
