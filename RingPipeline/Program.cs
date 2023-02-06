@@ -40,7 +40,11 @@ namespace RingPipeLine
         [STAThread]
         static void Main()
         {
+            // работа с БД
             //bool con = new SQLiteConnection().CreateConnection();
+
+            // Граф
+            CalcModule_QGraph qGraph = new CalcModule_QGraph();
 
 
             Application.EnableVisualStyles();
