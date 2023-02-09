@@ -18,9 +18,12 @@ namespace RingPipeLine
         public FormMain()
         {
             InitializeComponent();
+
             g = CreateGraphics();
+
             saveFileDialog1.Filter = "Dat (*.dat)|*.dat|All Files (*.*)|*.*";
             openFileDialog1.Filter = "Dat (*.dat)|*.dat|All Files (*.*)|*.*";
+
             Lib.graph = new Graph();
             Lib.graph.bitmap = new Bitmap(ClientRectangle.Width, ClientRectangle.Height);
         }
@@ -28,6 +31,7 @@ namespace RingPipeLine
         public void MyDraw()
         {
             Lib.graph.Draw();
+
             g.DrawImage(Lib.graph.bitmap, ClientRectangle);
         }
 
@@ -51,7 +55,9 @@ namespace RingPipeLine
                 Lib.graph.FileName = saveFileDialog1.FileName;
                 Lib.graph.Write();
             }
+
             saveFileDialog1.FileName = Lib.graph.FileName;
+
             if (saveFileDialog1.ShowDialog() == DialogResult.OK)
             {
                 Lib.graph.FileName = saveFileDialog1.FileName;
@@ -67,6 +73,7 @@ namespace RingPipeLine
                 Lib.graph.ReadN();
 
                 Text = "Graph: [" + Lib.graph.FileName + "]";
+
                 MyDraw();
             }
         }
@@ -74,10 +81,13 @@ namespace RingPipeLine
         private void toolStripMenuItem1_Click_1(object sender, EventArgs e)
         {
             if (Lib.graph.FileName != "")
+            {
                 Lib.graph.SaveOld();
+            }
             else
             {
                 saveFileDialog1.FileName = Lib.graph.FileName;
+
                 if (saveFileDialog1.ShowDialog() == DialogResult.OK)
                 {
                     Lib.graph.FileName = saveFileDialog1.FileName;
@@ -86,6 +96,9 @@ namespace RingPipeLine
             }
         }
 
+        /// <summary>
+        /// igorab Tools
+        /// </summary>
         private void FormMain_MouseDown(object sender, MouseEventArgs e)
         {
             switch (flTools)
@@ -94,16 +107,21 @@ namespace RingPipeLine
                     Lib.graph.SelectNode = Lib.graph.FindNode(e.X, e.Y);
                     drawing = Lib.graph.SelectNode != null;
                     break;
+
                 case 1:
                     Lib.graph.AddNode(e.X, e.Y);
                     MyDraw();
                     break;
+
                 case 2:
                     Lib.graph.SelectNodeBeg = Lib.graph.FindNode(e.X, e.Y);
                     drawing = Lib.graph.SelectNodeBeg != null;
-                    Lib.graph.x1 = e.X; Lib.graph.y1 = e.Y;
-                    Lib.graph.x2 = e.X; Lib.graph.y2 = e.Y;
+                    Lib.graph.x1 = e.X; 
+                    Lib.graph.y1 = e.Y;
+                    Lib.graph.x2 = e.X; 
+                    Lib.graph.y2 = e.Y;
                     break;
+
                 case 3:
                     Lib.graph.DeSelectEdge();
                     int NumLine = -1;
@@ -114,6 +132,7 @@ namespace RingPipeLine
                         MyDraw();
                     }
                     break;
+
                 case 4:
                     int nx = Lib.graph.Nodes[0].x;
                     break;
@@ -166,7 +185,9 @@ namespace RingPipeLine
             switch (flTools)
             {
                 case 2:
+
                     Lib.graph.SelectNode = Lib.graph.FindNode(e.X, e.Y);
+
                     if (Lib.graph.SelectNode != null)
                     {
                         Lib.graph.AddEdge();
@@ -174,6 +195,34 @@ namespace RingPipeLine
                     }
                     break;
             }
+        }
+
+        /// <summary>
+        /// igorab
+        /// </summary>
+        private void toolsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FormTools formTools;
+
+            foreach (Form frm in Application.OpenForms)
+            {
+                if (frm is FormTools)
+                {
+                    frm.Activate();
+                    return;
+                }
+            }
+
+            formTools = new FormTools();
+            formTools.Show();
+        }
+
+        /// <summary>
+        /// igorab Циклы в графе
+        /// </summary>
+        private void cyclesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Lib.graph.GraphCycles();
         }
     }
 }

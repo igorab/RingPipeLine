@@ -15,7 +15,7 @@ using QuikGraph.Utils;
 
 namespace RingPipeLine
 {
-    class CalcModule_QGraph
+    public class CalcModule_QGraph
     {
         /// https://github.com/YaccConstructor/QuickGraph/wiki/graph-theory-reminder
         public interface IEdge<TVertex>
@@ -46,7 +46,7 @@ namespace RingPipeLine
         /// <summary>
         /// https://github.com/YaccConstructor/QuickGraph/wiki/Creating-Graphs
         /// </summary>
-        public void InitGraph()
+        protected void InitGraph()
         {
 
             var edges = new SEdge<int>[] { new SEdge<int>(1, 2), new SEdge<int>(0, 1) };
@@ -89,6 +89,52 @@ namespace RingPipeLine
             }
 
         }
+
+
+        public void CreateGraph()
+        {
+
+            var edges = new SEdge<int>[] { new SEdge<int>(1, 2), new SEdge<int>(0, 1) };
+
+            var graph = edges.ToAdjacencyGraph<int, SEdge<int>>();
+
+            var g = new AdjacencyGraph<int, TaggedEdge<int, string>>();
+
+            int v1 = 1;
+            int v2 = 2;
+
+            g.AddVertex(v1);
+            g.AddVertex(v2);
+
+            var e1 = new TaggedEdge<int, string>(v1, v2, "hello");
+
+            g.AddEdge(e1);
+
+            int v3 = 3;
+            int v4 = 4;
+
+            // v3, v4 are not added to the graph yet
+            var e2 = new TaggedEdge<int, string>(v3, v4, "hello");
+
+            g.AddVerticesAndEdge(e2);
+
+            // iterate Verices
+            foreach (var v in g.Vertices)
+                Console.WriteLine(v);
+
+            // Use the Edges property get an enumerable collection of edges:
+            foreach (var e in g.Edges)
+                Console.WriteLine(e);
+
+            //Iterate out edges
+            foreach (var v in g.Vertices)
+            {
+                foreach (var e in g.OutEdges(v))
+                    Console.WriteLine(e);
+            }
+
+        }
+
 
         /// <summary>
         /// Incremental Connected Components

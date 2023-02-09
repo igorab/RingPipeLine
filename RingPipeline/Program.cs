@@ -12,12 +12,18 @@ namespace RingPipeLine
     class SQLiteConnection
     {
         public string connectionString = "Data Source=Hydro.db";
-        public string connectionStringExt = "Data Source=usersdata3.db;Cache=Shared;Mode=ReadOnly;";
+        //public static string connectionStringExt = "Data Source=usersdata3.db;Cache=Shared;Mode=ReadOnly;";
+        
+        public void InitConnection()
+        {
+            string connstr = "Data Source=usersdata3.db;Cache=Shared;Mode=ReadOnly;";
+        }
 
         public bool CreateConnection()
         {
             //SQLiteConnection
             //SQLitePCL
+            InitConnection();
 
             using (var connection = new SqliteConnection(connectionString))
             {
@@ -41,10 +47,13 @@ namespace RingPipeLine
         static void Main()
         {
             // работа с БД
-            //bool con = new SQLiteConnection().CreateConnection();
+            //SQLiteConnection sqLiteConnection = new SQLiteConnection();
+            //sqLiteConnection.InitConnection();
+            //bool con = sqLiteConnection.CreateConnection();
+
 
             // Граф
-            CalcModule_QGraph qGraph = new CalcModule_QGraph();
+            //CalcModule_QGraph qGraph = new CalcModule_QGraph();
 
 
             Application.EnableVisualStyles();
