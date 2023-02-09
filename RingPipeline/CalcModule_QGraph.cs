@@ -90,11 +90,19 @@ namespace RingPipeLine
 
         }
 
-
-        public void CreateGraph()
+        /// <summary>
+        /// igorab CreateGraph
+        /// </summary>
+        /// <param name="_graphNodes"></param>
+        public void CreateGraph(TNode[] _graphNodes)
         {
-
             var edges = new SEdge<int>[] { new SEdge<int>(1, 2), new SEdge<int>(0, 1) };
+
+            foreach (var node in _graphNodes)
+            {
+                var sEdge = new SEdge<int>(1, 2);
+                edges.Append(sEdge);
+            }
 
             var graph = edges.ToAdjacencyGraph<int, SEdge<int>>();
 

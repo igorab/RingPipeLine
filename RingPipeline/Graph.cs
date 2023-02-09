@@ -386,11 +386,11 @@ namespace RingPipeLine
 
 
         /// <summary>
-        /// Циклы в графе
+        ///igorab Циклы в графе
         /// </summary>
         public void GraphCycles()
         {
-            Lib.qGraph().CreateGraph();
+            Lib.qGraph().CreateGraph(Nodes);
 
             ofs = 0;
 
