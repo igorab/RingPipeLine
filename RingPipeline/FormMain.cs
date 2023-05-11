@@ -15,6 +15,18 @@ namespace RingPipeLine
         public static byte flTools;
         bool drawing = false;
 
+        /// <summary>
+        /// Tools options
+        /// </summary>
+        enum FlTool
+        {
+            SelectNode = 0,
+            AddNode = 1,
+            AddEdge = 2,
+            DeSelectEdge = 3,
+            DelNode = 4
+        }
+
         public FormMain()
         {
             InitializeComponent();
@@ -101,19 +113,22 @@ namespace RingPipeLine
         /// </summary>
         private void FormMain_MouseDown(object sender, MouseEventArgs e)
         {
-            switch (flTools)
+            FlTool flTool = (FlTool)flTools;
+
+            switch (flTool)
             {
-                case 0:
+                case FlTool.SelectNode:
+
                     Lib.graph.SelectNode = Lib.graph.FindNode(e.X, e.Y);
                     drawing = Lib.graph.SelectNode != null;
                     break;
 
-                case 1:
+                case FlTool.AddNode:
                     Lib.graph.AddNode(e.X, e.Y);
                     MyDraw();
                     break;
 
-                case 2:
+                case FlTool.AddEdge:
                     Lib.graph.SelectNodeBeg = Lib.graph.FindNode(e.X, e.Y);
                     drawing = Lib.graph.SelectNodeBeg != null;
                     Lib.graph.x1 = e.X; 
@@ -122,7 +137,8 @@ namespace RingPipeLine
                     Lib.graph.y2 = e.Y;
                     break;
 
-                case 3:
+                case FlTool.DeSelectEdge:
+
                     Lib.graph.DeSelectEdge();
                     int NumLine = -1;
                     int NumNode = Lib.graph.FindLine(e.X, e.Y, out NumLine);
@@ -133,7 +149,8 @@ namespace RingPipeLine
                     }
                     break;
 
-                case 4:
+                case FlTool.DelNode:
+
                     int nx = Lib.graph.Nodes[0].x;
                     break;
             }
@@ -165,6 +182,7 @@ namespace RingPipeLine
                         Lib.graph.SelectNode = Lib.graph.FindNode(e.X, e.Y);
                         MyDraw();
                         break;
+
                     case 3:
                         Lib.graph.DeSelectEdge();
                         int NumLine = -1;

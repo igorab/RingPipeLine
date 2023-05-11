@@ -7,7 +7,6 @@ using System.Drawing;
 
 namespace RingPipeLine
 {
-
     public class Lib
     {
         public static Graph graph;
@@ -55,6 +54,10 @@ namespace RingPipeLine
     /// </summary>
     public class Graph
     {
+        const int Sz = sizeof(int);
+
+        private Color BackgroundColor = Color.FromArgb(255, 255, 255);
+
         public string FileName = "";
         public TNode[] Nodes = new TNode[0];// узлы
         public Bitmap bitmap;
@@ -79,7 +82,7 @@ namespace RingPipeLine
         {
             using (Graphics g = Graphics.FromImage(bitmap))
             {
-                Color cl = Color.FromArgb(255, 255, 255);
+                Color cl = BackgroundColor;
                 g.Clear(cl);
 
                 SolidBrush MyBrush = (SolidBrush)Brushes.White;
@@ -224,7 +227,7 @@ namespace RingPipeLine
         protected int DataInInt()
         {
             int result = BitConverter.ToInt32(byData, ofs);
-            ofs += 4;
+            ofs += Sz;
             return result;
         }
 
@@ -234,10 +237,12 @@ namespace RingPipeLine
 
             int L = DataInInt(); 
 
-            byByte = new byte[4 * L];
+            byByte = new byte[Sz * L];
 
-            for (int j = 0; j <= 4 * L - 1; j++)
+            for (int j = 0; j <= Sz * L - 1; j++)
+            {
                 byByte[j] = byData[j + ofs];
+            }
 
             char[] charData = new char[L];
 
@@ -247,9 +252,11 @@ namespace RingPipeLine
 
             string s = "";
             for (int j = 0; j < charData.Length; j++)
+            {
                 s += charData[j];
+            }
 
-            ofs += 4 * L;
+            ofs += Sz * L;
 
             return s;
         }
@@ -257,9 +264,12 @@ namespace RingPipeLine
         protected void IntInData(int k)
         {
             byte[] byByte;
+
             byByte = BitConverter.GetBytes(k);
+
             byByte.CopyTo(byData, ofs); 
-            ofs += 4;
+
+            ofs += Sz;
         }
 
         protected void StrInData(string s)
@@ -271,14 +281,15 @@ namespace RingPipeLine
 
             char[] charData = s.ToCharArray();
 
-            byByte = new byte[4 * charData.Length];
+            byByte = new byte[Sz * charData.Length];
 
             Encoder e = Encoding.UTF32.GetEncoder();
 
             e.GetBytes(charData, 0, charData.Length, byByte, 0, true);
 
             byByte.CopyTo(byData, ofs); 
-            ofs += 4 * L;
+
+            ofs += Sz * L;
         }
 
         /// <summary>
@@ -287,12 +298,12 @@ namespace RingPipeLine
         /// <returns></returns>
         protected int LengthFile()  
         {
-            int n = 4;
+            int n = Sz;
             int L1 = Nodes.Length;
 
             for (int i = 0; i <= L1 - 1; i++)
             {
-                n += 16 + 4 * Nodes[i].name.Length;
+                n += (4*Sz) + (Sz * Nodes[i].name.Length);
 
                 int L2 = 0;
 
@@ -301,7 +312,7 @@ namespace RingPipeLine
                     L2 = Nodes[i].Edge.Length;
                 }
 
-                n += L2 * 20;
+                n += L2 * (5*Sz);
             }
 
             return n;
@@ -368,9 +379,12 @@ namespace RingPipeLine
                 StrInData(Nodes[i].name);
 
                 int L2 = 0;
+
                 if (Nodes[i].Edge != null)
                     L2 = Nodes[i].Edge.Length;
+
                 IntInData(L2);
+
                 for (int j = 0; j <= L2 - 1; j++)
                 {
                     IntInData(Nodes[i].Edge[j].A);
@@ -380,6 +394,7 @@ namespace RingPipeLine
                     IntInData(Nodes[i].Edge[j].numNode);
                 }
             }
+
             aFile.Write(byData, 0, N);
             aFile.Close();
         }
@@ -390,7 +405,10 @@ namespace RingPipeLine
         /// </summary>
         public void GraphCycles()
         {
-            Lib.qGraph().CreateGraph(Nodes);
+            CalcModule_QGraph qG =Lib.qGraph();
+            qG.CreateGraph(Nodes);
+            qG.CalculateGraph(Nodes);
+
 
             ofs = 0;
 
@@ -511,6 +529,7 @@ namespace RingPipeLine
             }
 
             Array.Resize<TEdge>(ref SelectNodeBeg.Edge, ++L);
+
             SelectNodeBeg.Edge[L - 1].numNode = n;
             SelectNodeBeg.Edge[L - 1].A = 0;
             SelectNodeBeg.Edge[L - 1].x1c = x1 - SelectNodeBeg.x;

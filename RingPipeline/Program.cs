@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Windows.Forms;
 using Microsoft.Data.Sqlite;
 using Microsoft.Data.Sqlite.Properties;
@@ -42,10 +44,30 @@ namespace RingPipeLine
         /// <summary>
         /// Главная точка входа для приложения.
         /// </summary>
-        
+
+        delegate bool Above(double _cmp);
+
+        static void TestDelegate()
+        {
+            /*Above*/ Func<double, bool> aboveTheLimit = (val) => (val > 300000.0 ? true : false);
+
+            bool test = aboveTheLimit(1234);
+        }
+
+        static void TransferSymbols(Stream source, Stream destination)
+        {
+                        
+            // ваш код по асинхронной фильтрации байтов из source в destination       
+        }
+
+
         [STAThread]
         static void Main()
         {
+            ThreadPool.GetMaxThreads(out int workerThreadsCount, out int ioThreadsCount);
+
+            TestDelegate();
+
             // работа с БД
             //SQLiteConnection sqLiteConnection = new SQLiteConnection();
             //sqLiteConnection.InitConnection();

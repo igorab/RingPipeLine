@@ -200,6 +200,37 @@ namespace RingPipeLine
             */
         }
 
+        internal void CalculateGraph(TNode[] Nodes)
+        {
+            List<TEdge> edges = new List<TEdge>() ;
 
+            int L1 = Nodes.Length;
+
+            for (int i = 0; i <= L1 - 1; i++)
+            {
+                int iX = Nodes[i].x ;
+                int iY = Nodes[i].y;
+                string sName = Nodes[i].name;
+
+                int L2 = 0;
+                if (Nodes[i].Edge != null)
+                {
+                    L2 = Nodes[i].Edge.Length;
+                }
+
+                for (int j = 0; j <= L2 - 1; j++)
+                {
+                    TEdge edge = Nodes[i].Edge[j];
+
+                    int InDataA = edge.A;
+                    int InData_x1c = edge.x1c;
+                    int InData_x2c = edge.x2c;
+                    int InData_yc = edge.yc;
+                    int InData_numNode = edge.numNode;
+
+                    edges.Add(edge);
+                }
+            }
+        }
     }
 }
