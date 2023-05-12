@@ -7,9 +7,26 @@ using System.Drawing;
 
 namespace RingPipeLine
 {
-    public class Lib
+    public static class Lib
     {
         public static Graph graph;
+
+        public static void run()
+        {
+            List<TNode> graphNodes = graph.Nodes.ToList();
+
+            foreach(TNode node in graphNodes)
+            {
+                List<TEdge> edges = node.Edge.ToList();
+
+                foreach (TEdge edge in edges)
+                {
+                    int dx = edge.x1c - edge.x2c;
+                    int dy = edge.yc;
+                }    
+            }
+        }
+
 
         public static CalcModule_QGraph qGraph()
         {

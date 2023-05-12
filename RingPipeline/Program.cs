@@ -54,19 +54,17 @@ namespace RingPipeLine
             bool test = aboveTheLimit(1234);
         }
 
+        // ваш код по асинхронной фильтрации байтов из source в destination       
         static void TransferSymbols(Stream source, Stream destination)
-        {
-                        
-            // ваш код по асинхронной фильтрации байтов из source в destination       
+        {                                    
         }
-
 
         [STAThread]
         static void Main()
         {
-            ThreadPool.GetMaxThreads(out int workerThreadsCount, out int ioThreadsCount);
+            //ThreadPool.GetMaxThreads(out int workerThreadsCount, out int ioThreadsCount);
 
-            TestDelegate();
+            //TestDelegate();
 
             // работа с БД
             //SQLiteConnection sqLiteConnection = new SQLiteConnection();
